@@ -37,10 +37,7 @@ const Home = () => {
             onChange={onRoomChangeHandler}
           />
         </div>
-        <Link
-          onClick={onClickLinkHandler}
-          to={`/chat?name=${name}&room=${room}`}
-        >
+        <Link onClick={onClickLinkHandler} to={`/chat/${name}`}>
           <button className={`${classes.button} ${classes.mt20}`}>
             Sign In
           </button>
