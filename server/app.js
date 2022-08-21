@@ -1,29 +1,26 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const dotenv = require('dotenv');
-
-const mysql = require('mysql');
-
+const dotenv = require('dotenv')
+const path = require('path');
+const nunjucks = require('nunjucks');
 
 dotenv.config();
+
 const webSocket = require("./socket");
 const indexRouter = require("./routes");
 
 
 const app = express();
 app.set("port", process.env.PORT || 3001);
+app.set('view engine', 'html');
+nunjucks.configure('views', {
+    express: app,
+    watch: true,
+});
+
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-
-const connection = mysql.createConnection({
-    host: process.env.host,
-    user: process.env.user,
-    password: process.env.password,
-    port: process.env.port,
-    database: process.env.database,
-});
-connection.connect();
 
 app.use("/", indexRouter);
 

@@ -2,7 +2,16 @@ const express = require("express");
 const path = require('path');
 const router = express.Router();
 
-const { connection } = require('../app');
+const mysql = require("mysql");
+
+const connection = mysql.createConnection({
+    host: process.env.host,
+    user: process.env.user,
+    password: process.env.password,
+    port: process.env.DB_port,
+    database: process.env.database,
+});
+connection.connect();
 
 router.get("/", (req, res) => {
     res.send("server is up and running");
@@ -20,8 +29,9 @@ router.post("/login", (req, res) => {
 router.post("/register", (req, res) => {
     //res.send({ data: { validity: true } });
     console.log(req.body);
+    console.log(req.headers.header === "REGISTER_USER");
 
-    if (req.headers.header === "REGISTER_USER") {
+    if (req.headers.header == "REGISTER_USER") {
         console.log(req.body);
         let sql = 'INSERT INTO user VALUES (?, ?, ?, ?, ?)';
 
@@ -38,13 +48,6 @@ router.post("/register", (req, res) => {
                 console.log(err);
                 console.log(rows);
             })
-
-        // push 성공 시, validity true 반환
-        //
-        // const data = {
-        //   validity: true,
-        // };
-        // res.send(data);
     }
 });
 
