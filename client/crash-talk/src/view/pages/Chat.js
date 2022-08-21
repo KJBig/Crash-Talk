@@ -3,8 +3,8 @@ import { useState, useEffect } from "react";
 import queryString from "query-string";
 import { useLocation } from "react-router-dom";
 import io from "socket.io-client";
-import classes from "./Card.module.css";
-import GV from '../../stores/global_variables'
+
+import GV from "../../stores/CONSTANTS/global_variables";
 
 let socket;
 
@@ -59,8 +59,8 @@ const Chat = (props) => {
   }, [messages]);
 
   return (
-    <div className={classes.outerContainer}>
-      <div className={classes.container}>
+    <div className={"classes.outerContainer"}>
+      <div className={"classes.container"}>
         {messages.map((message, i) => (
           <div key={i}>message : {message.text}</div>
         ))}
