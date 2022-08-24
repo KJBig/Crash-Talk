@@ -7,11 +7,19 @@ import action from "../../actions/action";
 import Card from "../components/UI/Card";
 import classes from "./Register.module.css";
 import { useNavigate } from "react-router-dom";
+import useInput from "../../hooks/use-input";
 
 const Register = () => {
   const authCtx = useContext(AuthContext);
   const redirector = useNavigate();
-  const [registerData, setRegisterData] = useState(GV.getDefaultUserForm());
+  const {
+    inputValue: inputName,
+    inputValidity: NameValidity,
+    inputHasError: nameHasError,
+    onBlurHandler: nameOnBlurHandler,
+    onChangeHandler: nameonChangeHandler,
+    resetInputValue: nameReset,
+  } = useInput();
 
   const inputChangeHandler = (event) => {
     setRegisterData({ ...registerData, [event.target.id]: event.target.value });
