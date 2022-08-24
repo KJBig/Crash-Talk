@@ -10,6 +10,8 @@ const dispatcherManager = (_action) => {
     return useDispatchers.joinRoomDispatcher(actionData);
   } else if (actionType === "LOGIN") {
     return useDispatchers.loginDispatcher(actionData);
+  } else if (actionType === "CHECK_EXISTENT") {
+    return useDispatchers.checkExistentDispatcher(actionData);
   }
 };
 

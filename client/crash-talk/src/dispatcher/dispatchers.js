@@ -35,7 +35,8 @@ const useDispatchers = (function () {
   };
   const joinRoomDispatcher = (actionData) => {
     // 채팅방 입장 디스패쳐
-    const socket = io({ // 소켓 연결
+    const socket = io({
+      // 소켓 연결
       cors: {
         origin: `${GV.getServerURL()}`,
         methods: ["GET", "POST"],
@@ -58,7 +59,26 @@ const useDispatchers = (function () {
     return socket;
   };
 
+  const checkExistentDispatcher = async (actionData) => {
+    const response = await requester.getExistent(
+      GV.getHeaders().check_existent,
+      actionData.inputValue,
+      GV.getEndPoint().register
+    );
+    try {
+      if (response.status === 200) {
+        console.log("200 OK");
+      } else if (response.status === 404) {
+        console.log("404 Not Found");
+      }
+    } catch (error) {
+      console.log("Catches error: " + error);
+    }
+    return response;
+  };
+
   return {
+    checkExistentDispatcher: checkExistentDispatcher,
     registerDispatcher: registerDispatcher,
     loginDispatcher: loginDispatcher,
     joinRoomDispatcher: joinRoomDispatcher,

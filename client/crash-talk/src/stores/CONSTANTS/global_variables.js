@@ -4,6 +4,7 @@ const GV = (function () {
     register: "REGISTER_USER",
     login: "LOGIN_USER",
     room_join: "JOIN_ROOM",
+    check_existent: "CHECK_EXISTENT",
   };
   const ENDPOINT = {
     register: "/register",

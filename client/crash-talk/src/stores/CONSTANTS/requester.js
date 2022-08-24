@@ -16,15 +16,25 @@ const requester = (function () {
         data: {
           ...data,
         },
-        validateStatus: false,
       });
       return response;
     },
+
     joinRoomRequest: async (header, user, room_url) => {
       const response = await axios.get(room_url, {
         headers: header,
         auth: user,
       });
+      return response;
+    },
+
+    getExistent: async (header, inputData, ENDPOINT) => {
+      const response = await axios.get(ENDPOINT, {
+        headers: { header },
+        ContentType: "application/json",
+        data: inputData,
+      });
+
       return response;
     },
   };

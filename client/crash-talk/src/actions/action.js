@@ -6,6 +6,7 @@ const action = (function () {
   const toJoinRoom = { type: "JOIN_ROOM", data: undefined };
   const toLogin = { type: "LOGIN", data: undefined };
   const toLogout = { type: "LOGOUT", data: undefined };
+  const toCheckExistent = { type: "CHECK_EXISTENT", data: undefined };
   let actionObj = undefined;
 
   return {
@@ -21,6 +22,11 @@ const action = (function () {
     callLogoutAction: (data) => {
       actionObj = { ...toLogout, data: data };
     },
+
+    callCheckExistsAction: (data) => {
+      actionObj = { ...toCheckExistent, data: data };
+    },
+
     dispatch: (data) => {
       // 액션 객체를 가지고 디스패치 함수 실행
       return dispatcherManager(data || actionObj);
