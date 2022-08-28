@@ -12,6 +12,8 @@ const dispatcherManager = (_action) => {
     return useDispatchers.loginDispatcher(actionData);
   } else if (actionType === "CHECK_EXISTENT") {
     return useDispatchers.checkExistentDispatcher(actionData);
+  } else if (actionType === "JOIN_HOME") {
+    return useDispatchers.loadHomeDispatcher(actionData);
   }
 };
 

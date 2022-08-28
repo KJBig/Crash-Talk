@@ -1,47 +1,44 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import Action from "../../actions/action";
+import Button from "../components/UI/Button";
+import { AuthContext } from "../../stores/auth-context";
 
 const Home = () => {
-  const [name, setName] = useState("");
-  const [room, setRoom] = useState("");
+  const authCtx = useContext(AuthContext);
+  Action.callLoadHomeAction(authCtx.loginUserStatus); // 유저 정보를 전달하여 유저에 맞는 채팅방 목록을 불러옴
+  const { chatList } = Action.dispatch();
+  const canJoin = false;
+  const logoutHandler = (e) => {
+    e.preventDefault();
+    Action.callLogoutAction();
+  };
 
-  const onNameChangeHandler = (event) => {
-    setName(event.target.value);
-  };
-  const onRoomChangeHandler = (event) => {
-    setRoom(event.target.value);
+  const joinRoomHandler = (e) => {
+    e.preventDefault();
+    Action.callJoinRoomAction({
+      room_id: e.target.key,
+      user: authCtx.loginUserStatus,
+    });
+    const canJoin = Action.dispatch();
   };
 
-  const onClickLinkHandler = (event) => {
-    if (!name || !room) event.preventDefault();
-  };
+  useEffect(() => {
+    if (canJoin) {
+    }
+  }, [canJoin]);
 
   return (
     <div className={"classes.joinOuterContainer"}>
-      <div className={"classes.joinInnerContainer"}>
-        <h1 className={"classes.heading"}>Join</h1>
-        <div>
-          <input
-            placeholder={""}
-            className={"classes.joinInput"}
-            type={"text"}
-            onChange={onNameChangeHandler}
-          />
-        </div>
-        <div>
-          <input
-            placeholder={""}
-            className={`${"classes.joinInput"} ${"classes.mt20"}`}
-            type={"text"}
-            onChange={onRoomChangeHandler}
-          />
-        </div>
-        <Link onClick={onClickLinkHandler} to={`/chat/${name}`}>
-          <button className={`${"classes.button"} ${"classes.mt20"}`}>
-            Sign In
-          </button>
-        </Link>
-      </div>
+      {chatList.map((room) => {
+        return (
+          <div onClick={joinRoomHandler} key={room.id}>
+            {room.name}
+            {room.members}
+          </div>
+        );
+      })}
+      <Button onClick={logoutHandler}>Logout</Button>
     </div>
   );
 };

@@ -15,7 +15,6 @@ const Chat = (props) => {
 
   const sendMessage = (event) => {
     event.preventDefault();
-    console.log("asd");
     // if (message) {
     //   socket.emit("sendMessage", message, () => setMessage(""));
     // }

@@ -2,6 +2,7 @@ import requester from "../stores/CONSTANTS/requester";
 import GV from "../stores/CONSTANTS/global_variables";
 import React from "react";
 import io from "socket.io-client";
+import { useNavigate } from "react-router-dom";
 
 const useDispatchers = (function () {
   // 디스패쳐 함수들을 관리하는 파일
@@ -33,6 +34,11 @@ const useDispatchers = (function () {
     );
     return response;
   };
+
+  const logoutDispatcher = async (actionData) => {
+    localStorage.clear();
+  };
+
   const joinRoomDispatcher = (actionData) => {
     // 채팅방 입장 디스패쳐
     const socket = io({
@@ -77,11 +83,21 @@ const useDispatchers = (function () {
     return response;
   };
 
+  const loadHomeDispatcher = async (actionData) => {
+    const response = await requester.postUserData(
+      GV.getHeaders().join_home,
+      actionData,
+      GV.getEndPoint().home
+    );
+    return response;
+  };
+
   return {
-    checkExistentDispatcher: checkExistentDispatcher,
-    registerDispatcher: registerDispatcher,
-    loginDispatcher: loginDispatcher,
-    joinRoomDispatcher: joinRoomDispatcher,
+    checkExistentDispatcher,
+    registerDispatcher,
+    loginDispatcher,
+    joinRoomDispatcher,
+    loadHomeDispatcher,
   };
 })();
 

@@ -16,6 +16,11 @@ const Register = () => {
   const [nickNameCheckExsistence, setNickNameCheckExsistence] = useState(true);
   const [requestIsCompleted, setRequestIsCompleted] = useState(false);
 
+  if (localStorage.getItem("loginToken")) {
+    redirector("/home");
+  }
+
+  console.log("re-rendered");
   const {
     // 커스텀 훅을 통한 입력값 유효성 관리
     inputValue: inputName,
@@ -55,6 +60,7 @@ const Register = () => {
   // };
 
   const onCheckNameExistentHandler = (event) => {
+    console.log(inputName);
     action.callCheckExistsAction(inputName);
     setNickNameCheckExsistence(action.dispatch().validity);
   };
@@ -80,8 +86,10 @@ const Register = () => {
   };
 
   useEffect(() => {
+    console.log(requestIsCompleted);
     setTimeout(() => {
-      if (requestIsCompleted) redirector("/home");
+      if (requestIsCompleted && localStorage.getItem("loginToken"))
+        redirector("/home");
     }, 500);
   }, [requestIsCompleted]);
 
@@ -99,6 +107,9 @@ const Register = () => {
             onBlur={nameOnBlurHandler}
             value={inputName}
           />
+          <Button type={"button"} onClick={onCheckNameExistentHandler}>
+            check existence
+          </Button>
           {nameHasError && <p>이름은 두 글자 이상이어야 합니다.</p>}
         </div>
         <div className={""}>
@@ -111,9 +122,7 @@ const Register = () => {
             onBlur={nickNameOnBlurHandler}
             value={inputNickName}
           ></input>
-          <Button type={"button"} onClick={onCheckNameExistentHandler}>
-            check existence
-          </Button>
+          {nickNameHasError && <p>닉네임은 두 글자 이상이어야 합니다.</p>}
           {!nickNameCheckExsistence && <p>닉네임이 중복됩니다.</p>}
         </div>
         <div className={""}>

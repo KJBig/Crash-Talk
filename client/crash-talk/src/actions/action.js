@@ -7,6 +7,7 @@ const action = (function () {
   const toLogin = { type: "LOGIN", data: undefined };
   const toLogout = { type: "LOGOUT", data: undefined };
   const toCheckExistent = { type: "CHECK_EXISTENT", data: undefined };
+  const toJoinHome = { type: "JOIN_HOME", data: undefined };
   let actionObj = undefined;
 
   return {
@@ -25,6 +26,10 @@ const action = (function () {
 
     callCheckExistsAction: (data) => {
       actionObj = { ...toCheckExistent, data: data };
+    },
+
+    callLoadHomeAction: (data) => {
+      actionObj = { ...toJoinHome, data: data };
     },
 
     dispatch: (data) => {
