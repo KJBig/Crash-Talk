@@ -4,12 +4,15 @@ const GV = (function () {
     register: "REGISTER_USER",
     login: "LOGIN_USER",
     room_join: "JOIN_ROOM",
+    check_existent: "CHECK_EXISTENT",
+    join_home: "JOIN_HOME",
   };
   const ENDPOINT = {
     register: "/register",
     login: "/login",
-    chat: "/chat/",
-    home: "/home",
+    joinChat: "/chat/:chatID",
+    joinRoom: "/room/:roomid",
+    home: "/home/",
   };
   const defaultUserForm = {
     name: undefined,
@@ -24,11 +27,20 @@ const GV = (function () {
     password: undefined,
   };
 
-  const chatLogs = {
-    users: [],
-    room_id: 0,
-    chat_log: [],
-    fetchDate: "",
+  const defaultChat = {
+    id: undefined,
+    members: undefined,
+  };
+
+  const defaultRoom = {
+    id: undefined,
+    members: undefined,
+  };
+
+  const chatLog = {
+    user: undefined,
+    content: "",
+    date: undefined,
   };
 
   const defaultChatLog = {
@@ -43,6 +55,9 @@ const GV = (function () {
     getDefaultUserForm: () => defaultUserForm,
     getDefaultLoginForm: () => defaultLoginForm,
     getEndPoint: () => ENDPOINT,
+    getDefualtRoomForm: () => defaultRoom,
+    getDefualtChatForm: () => defaultChat,
+    getDefualtChatLogForm: () => defaultChatLog,
   };
 })();
 

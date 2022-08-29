@@ -11,6 +11,7 @@ import Home from "./view/pages/Home";
 import Chat from "./view/pages/Chat";
 import "./App.css";
 import { AuthContextProvider } from "./stores/auth-context";
+import setAuthorization from "./stores/utils/setAuthorization";
 
 const App = () => {
   return (

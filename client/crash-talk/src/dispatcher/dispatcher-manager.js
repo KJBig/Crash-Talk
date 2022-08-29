@@ -7,9 +7,15 @@ const dispatcherManager = (_action) => {
   if (actionType === "REGISTER") {
     return useDispatchers.registerDispatcher(actionData);
   } else if (actionType === "JOIN_ROOM") {
-    return useDispatchers.joinRoomDispatcher(actionData);
+    return useDispatchers.joinRoomDispatcher(actionData)}
+    else if (actionType === "JOIN_CHAT") {
+    return useDispatchers.joinChatDispatcher(actionData);
   } else if (actionType === "LOGIN") {
     return useDispatchers.loginDispatcher(actionData);
+  } else if (actionType === "CHECK_EXISTENT") {
+    return useDispatchers.checkExistentDispatcher(actionData);
+  } else if (actionType === "JOIN_HOME") {
+    return useDispatchers.joinHomeDispatcher(actionData);
   }
 };
 

@@ -1,17 +1,11 @@
-import requester from "../stores/CONSTANTS/requester";
+import requester from "../stores/utils/requester";
 import GV from "../stores/CONSTANTS/global_variables";
 import React from "react";
 import io from "socket.io-client";
+import { useNavigate } from "react-router-dom";
 
 const useDispatchers = (function () {
-  // 디스패쳐 함수들을 관리하는 파일
-  const registerDispatcher = async (actionData) => {
-    // 회원가입 디스패쳐
-    const response = await requester.postUserData(
-      GV.getHeaders().register,
-      actionData,
-      GV.getEndPoint().register
-    );
+  const errorCatcher = (response) => {
     try {
       if (response.status === 200) {
         console.log("200 OK");
@@ -21,21 +15,64 @@ const useDispatchers = (function () {
     } catch (error) {
       console.log("Catches error: " + error);
     }
+  };
+
+  // 디스패쳐 함수들을 관리하는 파일
+  const registerDispatcher = async (actionData) => {
+    // 회원가입 디스패쳐
+    const response = await requester.post(
+      GV.getHeaders().register,
+      actionData,
+      GV.getEndPoint().register
+    );
+    errorCatcher(response);
     return response;
   };
 
   const loginDispatcher = async (actionData) => {
     // 로그인 디스패쳐
-    const response = await requester.postUserData(
+    const response = await requester.post(
       GV.getHeaders().login,
       actionData,
       GV.getEndPoint().login
     );
+    errorCatcher(response);
     return response;
   };
-  const joinRoomDispatcher = (actionData) => {
-    // 채팅방 입장 디스패쳐
-    const socket = io({ // 소켓 연결
+
+  const logoutDispatcher = async (actionData) => {
+    localStorage.clear();
+  };
+
+  const joinRoomDispatcher = (actionData) => {};
+
+  const checkExistentDispatcher = async (actionData) => {
+    const response = await requester.getExistent(
+      GV.getHeaders().check_existent,
+      actionData.inputValue,
+      GV.getEndPoint().register
+    );
+    errorCatcher(response);
+    return response;
+  };
+
+  const joinHomeDispatcher = async (userData) => {
+    // user정보를 기반으로 user가 가지고 있는 chat, room 데이터를 불러와야 함.
+    const response = await requester.get(
+      GV.getHeaders().join_home,
+      userData,
+      GV.getEndPoint().home
+    );
+    errorCatcher(response);
+    return response;
+  };
+
+  const joinChatDispatcher = async (userData) => {
+    // chat 로그 불러오기
+    const response = await requester.get(userData);
+
+    const socket = io({
+      // 소켓 연결
       cors: {
         origin: `${GV.getServerURL()}`,
         methods: ["GET", "POST"],
@@ -45,7 +82,7 @@ const useDispatchers = (function () {
       allowEI03: true,
     });
 
-    socket.emit("join", {
+    socket.emit("join_room", {
       name: actionData.name,
       room: actionData.room,
       callback: (error) => {
@@ -59,9 +96,12 @@ const useDispatchers = (function () {
   };
 
   return {
-    registerDispatcher: registerDispatcher,
-    loginDispatcher: loginDispatcher,
-    joinRoomDispatcher: joinRoomDispatcher,
+    checkExistentDispatcher,
+    registerDispatcher,
+    loginDispatcher,
+    joinRoomDispatcher,
+    joinHomeDispatcher,
+    joinChatDispatcher,
   };
 })();
 

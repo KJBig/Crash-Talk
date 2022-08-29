@@ -1,47 +1,35 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import Action from "../../actions/action";
+import Button from "../components/UI/Button";
+import { AuthContext } from "../../stores/auth-context";
+import setAuthorization from "../../stores/utils/setAuthorization";
 
 const Home = () => {
-  const [name, setName] = useState("");
-  const [room, setRoom] = useState("");
+  // chat은 채팅방, room은 3d 공간을 지칭한다.
+  const authCtx = useContext(AuthContext);
+  Action.callJoinHomeAction(authCtx.loginUserStatus); // 유저 정보를 전달하여 유저에 맞는 chat 및 room을 불러옴
+  const response = Action.dispatch();
+  const chat = response.data.chat;
+  const room = response.data.room;
 
-  const onNameChangeHandler = (event) => {
-    setName(event.target.value);
-  };
-  const onRoomChangeHandler = (event) => {
-    setRoom(event.target.value);
-  };
+  authCtx.userChatHandler(chat);
+  authCtx.userRoomHandler(room);
 
-  const onClickLinkHandler = (event) => {
-    if (!name || !room) event.preventDefault();
+  const logoutHandler = (e) => {
+    e.preventDefault();
+    Action.callLogoutAction();
   };
 
   return (
     <div className={"classes.joinOuterContainer"}>
-      <div className={"classes.joinInnerContainer"}>
-        <h1 className={"classes.heading"}>Join</h1>
-        <div>
-          <input
-            placeholder={""}
-            className={"classes.joinInput"}
-            type={"text"}
-            onChange={onNameChangeHandler}
-          />
-        </div>
-        <div>
-          <input
-            placeholder={""}
-            className={`${"classes.joinInput"} ${"classes.mt20"}`}
-            type={"text"}
-            onChange={onRoomChangeHandler}
-          />
-        </div>
-        <Link onClick={onClickLinkHandler} to={`/chat/${name}`}>
-          <button className={`${"classes.button"} ${"classes.mt20"}`}>
-            Sign In
-          </button>
-        </Link>
-      </div>
+      <Link to={`/room/${room.id}`}>
+        <Button>Join Room</Button>
+      </Link>
+      <Link to={`/chat/${chat.id}`}>
+        <Button>Join Chat</Button>
+      </Link>
+      <Button onClick={logoutHandler}>Logout</Button>
     </div>
   );
 };
